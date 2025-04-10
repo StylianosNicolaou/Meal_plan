@@ -1,0 +1,1710 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>7-Week Fat Loss Meal Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #27ae60;
+            --bg: #f4f4f4;
+            --white: #ffffff;
+            --gray: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 1rem;
+            color: var(--primary);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .week {
+            margin-bottom: 1rem;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .week h2 {
+            margin: 0;
+            padding: 1rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+        }
+
+        .week-content { display: none; transition: all 0.3s ease-in-out; overflow: hidden; } .week-content.open { display: block; }
+            display: none;
+            padding: 1rem;
+        }
+
+        .day {
+            margin-bottom: 1.5rem;
+        }
+
+        .day h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            border-bottom: 1px solid var(--gray);
+            padding-bottom: 0.3rem;
+        }
+
+        .meal {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+            background: #ecf0f1;
+            padding: 0.7rem;
+            border-radius: 8px;
+        }
+
+        .meal input {
+            margin-right: 0.8rem;
+            margin-top: 3px;
+            transform: scale(1.2);
+        }
+
+        .meal-detail {
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .meal-detail strong {
+            display: block;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 2rem auto 1rem;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .week h2 { font-size: 1.1rem; }
+            .day h3 { font-size: 1rem; }
+            .meal-detail { font-size: 0.9rem; }
+        }
+    </style>
+
+    <style>
+        .progress-bar-container {
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.5rem 0 1rem;
+            height: 10px;
+        }
+        .progress-bar {
+            background-color: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .dark-mode body {
+            background-color: #1e272e;
+            color: #f5f6fa;
+        }
+        .dark-mode .week {
+            background-color: #2f3640;
+        }
+        .dark-mode .meal {
+            background-color: #353b48;
+        }
+        .dark-mode .progress-bar-container {
+            background-color: #444;
+        }
+        .dark-mode .progress-bar {
+            background-color: #00cec9;
+        }
+        .dark-mode .reset-btn {
+            background-color: #d63031;
+        }
+        .toggle-dark {
+            display: block;
+            margin: 0 auto 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>7-Week Fat Loss Meal Tracker</h1>
+<button class="toggle-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <button class="reset-btn" onclick="resetProgress()">Reset Progress</button>
+<div class="week"><h2 onclick="toggleWeek(this)">Week 1</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="1_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="1_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="1_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div><div class="week"><h2 onclick="toggleWeek(this)">Week 2</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="2_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="2_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="2_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div><div class="week"><h2 onclick="toggleWeek(this)">Week 3</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="3_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="3_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="3_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div><div class="week"><h2 onclick="toggleWeek(this)">Week 4</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="4_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="4_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="4_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div><div class="week"><h2 onclick="toggleWeek(this)">Week 5</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="5_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="5_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="5_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div><div class="week"><h2 onclick="toggleWeek(this)">Week 6</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="6_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="6_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="6_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div><div class="week"><h2 onclick="toggleWeek(this)">Week 7</h2><div class="progress-bar-container"><div class="progress-bar"></div></div><div class="week-content"><div class="day"><h3>Monday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Monday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Monday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Monday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Monday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Monday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Monday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Monday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Monday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Monday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Monday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Tuesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Tuesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Tuesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Tuesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Tuesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Tuesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Tuesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Tuesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Tuesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Tuesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Tuesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Wednesday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Wednesday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Wednesday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Wednesday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Wednesday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Wednesday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Wednesday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Wednesday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Wednesday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Wednesday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Wednesday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Thursday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Thursday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Thursday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Thursday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Thursday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Thursday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Thursday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Thursday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Thursday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Thursday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Thursday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Friday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Friday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Friday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Friday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Friday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Friday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Friday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Friday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Friday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Friday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Friday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Saturday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Saturday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Saturday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Saturday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Saturday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Saturday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Saturday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Saturday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Saturday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Saturday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Saturday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div><div class="day"><h3>Sunday</h3>
+            <div class="meal">
+                <input type="checkbox" id="7_Sunday_Breakfast" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Sunday_Breakfast">
+                    <strong>Breakfast</strong>Greek yogurt (200g), honey (10g), almonds (15g), banana (120g) - 350 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Sunday_Snack_1" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Sunday_Snack_1">
+                    <strong>Snack 1</strong>Protein bar (1), apple (150g) - 250 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Sunday_Lunch" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Sunday_Lunch">
+                    <strong>Lunch</strong>Grilled chicken (180g), rice (150g), olive oil (10g) - 550 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Sunday_Snack_2" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Sunday_Snack_2">
+                    <strong>Snack 2</strong>Cottage cheese (150g), rice cakes (2) - 220 kcal
+                </label>
+            </div>
+            <div class="meal">
+                <input type="checkbox" id="7_Sunday_Dinner" onchange="saveProgress(this)" />
+                <label class="meal-detail" for="7_Sunday_Dinner">
+                    <strong>Dinner</strong>Tuna (100g), pita bread (1), tzatziki (30g), cheese (30g) - 430 kcal
+                </label>
+            </div></div></div></div>
+<script>
+    function saveProgress(checkbox) {
+        localStorage.setItem(checkbox.id, checkbox.checked);
+    }
+
+    function resetProgress() {
+        if (confirm("Are you sure you want to reset your progress?")) {
+            localStorage.clear();
+            document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
+        }
+    }
+
+    function toggleWeek(header) {
+        const content = header.nextElementSibling;
+        content.classList.toggle("open");
+    }
+
+    window.onload = () => {
+        document.querySelectorAll("input[type=checkbox]").forEach(cb => {
+            const saved = localStorage.getItem(cb.id);
+            if (saved === "true") cb.checked = true;
+        });
+    };
+</script>
+</body>
+</html>
+
+<script>
+    function saveProgress(checkbox) {
+        localStorage.setItem(checkbox.id, checkbox.checked);
+        updateWeekProgress();
+    }
+
+    function resetProgress() {
+        if (confirm("Are you sure you want to reset your progress?")) {
+            localStorage.clear();
+            document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
+            updateWeekProgress();
+        }
+    }
+
+    function toggleWeek(header) {
+        const content = header.nextElementSibling;
+        content.classList.toggle("open");
+    }
+
+    function updateWeekProgress() {
+        document.querySelectorAll(".week").forEach(weekEl => {
+            const checkboxes = weekEl.querySelectorAll("input[type='checkbox']");
+            const total = checkboxes.length;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percent = Math.round((checked / total) * 100);
+            const progress = weekEl.querySelector(".progress-bar");
+            if (progress) {
+                progress.style.width = percent + "%";
+            }
+        });
+    }
+
+    function toggleDarkMode() {
+        document.documentElement.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", document.documentElement.classList.contains("dark-mode"));
+    }
+
+    window.onload = () => {
+        const darkPref = localStorage.getItem("darkMode") === "true";
+        if (darkPref) document.documentElement.classList.add("dark-mode");
+
+        document.querySelectorAll("input[type=checkbox]").forEach(cb => {
+            const saved = localStorage.getItem(cb.id);
+            if (saved === "true") cb.checked = true;
+        });
+        updateWeekProgress();
+    };
+</script>
+</body>
+</html>
